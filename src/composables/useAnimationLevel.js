@@ -9,13 +9,27 @@ export const animationLevels = [
   { value: 'high', label: '高', description: '极致视觉体验' },
 ]
 
+let hydratedFromStorage = false
+
 export const setAnimationLevel = (level) => {
   animationLevel.value = level
-  localStorage.setItem('animationLevel', level)
+  if (import.meta.client) {
+    localStorage.setItem('animationLevel', level)
+  }
 }
 
-if (localStorage.getItem('animationLevel')) {
-  animationLevel.value = localStorage.getItem('animationLevel')
+export const syncAnimationLevelFromStorage = () => {
+  if (!import.meta.client || hydratedFromStorage) {
+    return
+  }
+
+  const storedLevel = localStorage.getItem('animationLevel')
+
+  if (animationLevels.some((level) => level.value === storedLevel)) {
+    animationLevel.value = storedLevel
+  }
+
+  hydratedFromStorage = true
 }
 
 export const isAnimationEnabled = computed(() => {

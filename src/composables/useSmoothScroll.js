@@ -1,16 +1,15 @@
-import { onBeforeUnmount, onMounted, ref } from 'vue'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { onBeforeUnmount, onMounted } from 'vue'
 
-gsap.registerPlugin(ScrollTrigger)
-ScrollTrigger.config({
-  limitCallbacks: true,
-})
+import { refreshScrollTrigger } from '../lib/scrollTriggerRuntime'
 
 export function useSmoothScroll() {
   let resizeObserver
 
   onMounted(() => {
+    if (!import.meta.client) {
+      return
+    }
+
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
@@ -19,7 +18,7 @@ export function useSmoothScroll() {
     resizeObserver = new ResizeObserver(() => {
       clearTimeout(resizeTimer)
       resizeTimer = setTimeout(() => {
-        ScrollTrigger.refresh()
+        void refreshScrollTrigger()
       }, 200)
     })
 

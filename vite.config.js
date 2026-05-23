@@ -5,7 +5,7 @@ import tresCompilerOptions from '@tresjs/core/template-compiler-options'
 
 export default defineConfig({
   // Default to GitHub repo path, allow override for other deployments.
-  base: process.env.VITE_PUBLIC_BASE || '/luminous_site/',
+  base: process.env.VITE_PUBLIC_BASE || '/luminous/',
   plugins: [vue(tresCompilerOptions), tailwindcss()],
   server: {
     proxy: {
